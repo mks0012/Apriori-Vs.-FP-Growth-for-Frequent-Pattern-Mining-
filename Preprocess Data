@@ -1,0 +1,16 @@
+## Data Preprocessing
+
+import pandas as pd
+
+# Import the dataset
+df = pd.read_csv("gdp-per-capita.csv")
+
+# Convert the "Year" column to string type
+df["Year"] = df["Year"].astype(str)
+
+# Create a new column for the year
+df["year"] = df["Year"].str[:4]
+
+# Filter the dataset to keep only the years between 2010 and 2020
+df = df[(df["year"] >= "2000") & (df["year"] <= "2020")]
+print (df)
