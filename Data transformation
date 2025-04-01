@@ -1,0 +1,32 @@
+## data transformation to transform dataset into suitable format
+
+import pandas as pd
+
+# Import the dataset
+df = pd.read_csv("gdp-per-capita.csv")
+
+# Convert the "Year" column to string type
+df["Year"] = df["Year"].astype(str)
+
+# Create a new column for the year
+df["year"] = df["Year"].str[:4]
+
+# Filter the dataset to keep only the years between 2010 and 2020
+df = df[(df["year"] >= "2000") & (df["year"] <= "2020")]
+
+# Drop the "Code" and "year" columns
+df = df.drop(columns=["Code", "year"])
+
+# Pivot the dataframe to convert it into a transaction dataset
+df = df.pivot(index="Entity", columns="Year", values="GDP per capita growth (annual %)")
+
+# Convert NaN values to 0
+df = df.fillna(0)
+
+# Convert all values to binary (0 or 1) based on whether they are positive or negative
+df[df < 0] = 0
+df[df > 0] = 1
+
+# Convert the dataframe to a list of transactions
+transactions = df.apply(lambda x: list(x), axis=1).tolist()
+print(transactions)
